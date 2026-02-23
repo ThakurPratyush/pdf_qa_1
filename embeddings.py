@@ -57,6 +57,16 @@ def create_and_save_index(chunks, client):
 # --------------------------------------------------
 
 def load_index():
+    print("CURRENT_DIR:", CURRENT_DIR)
+    print("PROJECT_ROOT:", PROJECT_ROOT)
+    print("VECTOR_STORE_DIR:", VECTOR_STORE_DIR)
+    print("INDEX_PATH:", INDEX_PATH)
+    print("CHUNKS_PATH:", CHUNKS_PATH)
+
+    print("Does vector_store exist?", os.path.exists(VECTOR_STORE_DIR))
+    print("Does index exist?", os.path.exists(INDEX_PATH))
+    print("Does chunks exist?", os.path.exists(CHUNKS_PATH))
+
     if os.path.exists(INDEX_PATH) and os.path.exists(CHUNKS_PATH):
         index = faiss.read_index(INDEX_PATH)
         with open(CHUNKS_PATH, "rb") as f:
