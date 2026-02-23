@@ -67,19 +67,13 @@ st.write(f"Found {len(pdf_files)} PDF files.")
 
 @st.cache_resource
 def load_knowledge_base():
-    index, chunks = load_index()
+    index, chunks =  load_index()
 
     if index is not None and chunks is not None:
         return chunks, index
 
-    st.error("Vector store missing. It should not recompute.")
+    st.error("Vector store missing.")
     st.stop()
-
-
-with st.spinner("Loading knowledge base..."):
-    chunks, index = load_knowledge_base(client)
-
-st.success("Knowledge Base Ready ✅")
 
 
 # --------------------------------------------------
