@@ -2,20 +2,24 @@ import streamlit as st
 import os
 
 from config import MODEL_NAME
+from pdf_utils import extract_text_from_pdf, chunk_text
 from prompts import STRICT_PDF_QA_PROMPT
-from embeddings import load_index, retrieve_top_k
+from embeddings import (
+    create_and_save_index,
+    load_index,
+    retrieve_top_k
+)
 
 from google.oauth2 import service_account
 from google import genai
 
 
 # --------------------------------------------------
-# Streamlit Page Setup
+# Streamlit Setup
 # --------------------------------------------------
 
 st.set_page_config(page_title="PDF Knowledge Chatbot", layout="wide")
 st.title("📚 Knowledge Base Chatbot (Strict Mode)")
-st.write("App initialized successfully ✅")
 
 
 # --------------------------------------------------
@@ -23,7 +27,7 @@ st.write("App initialized successfully ✅")
 # --------------------------------------------------
 
 if "google_credentials" not in st.secrets:
-    st.error("Google credentials not found in Streamlit secrets.")
+    st.error("Google credentials not found.")
     st.stop()
 
 creds_dict = dict(st.secrets["google_credentials"])
@@ -42,28 +46,58 @@ client = genai.Client(
 
 
 # --------------------------------------------------
-# Load Vector Store
+# PDF Folder
 # --------------------------------------------------
 
-# --------------------------------------------------
-# Load Vector Store
-# --------------------------------------------------
+PDF_FOLDER = "data/knowledge_base"
 
-@st.cache_resource
-def load_knowledge_base():
-    index, chunks = load_index()
-    return index, chunks
-
-
-with st.spinner("Loading knowledge base..."):
-    index, chunks = load_knowledge_base()
-
-if index is None or chunks is None:
-    st.error("Vector store missing. Please commit precomputed index.")
+if not os.path.exists(PDF_FOLDER):
+    st.error("Knowledge base folder missing.")
     st.stop()
 
 
-st.success("Knowledge Base Ready ✅")###
+# --------------------------------------------------
+# Load Knowledge Base (Auto Recompute)
+# --------------------------------------------------
+
+@st.cache_resource
+def load_knowledge_base(_client):
+
+    index, chunks = load_index(PDF_FOLDER)
+
+    if index is not None and chunks is not None:
+        return chunks, index
+
+    st.warning("Recomputing embeddings...")
+
+    all_text = ""
+
+    for file_name in os.listdir(PDF_FOLDER):
+        if file_name.endswith(".pdf"):
+            file_path = os.path.join(PDF_FOLDER, file_name)
+            with open(file_path, "rb") as f:
+                all_text += extract_text_from_pdf(f)
+
+    chunks = chunk_text(all_text)
+    index = create_and_save_index(chunks, _client, PDF_FOLDER)
+
+    return chunks, index
+
+
+with st.spinner("Loading knowledge base..."):
+    chunks, index = load_knowledge_base(client)
+
+st.success("Knowledge Base Ready ✅")
+
+
+# --------------------------------------------------
+# Force Rebuild Button
+# --------------------------------------------------
+
+if st.sidebar.button("🔄 Force Rebuild Index"):
+    for file in os.listdir("vector_store"):
+        os.remove(os.path.join("vector_store", file))
+    st.experimental_rerun()
 
 
 # --------------------------------------------------
