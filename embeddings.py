@@ -3,8 +3,13 @@ import faiss
 import os
 import pickle
 
-INDEX_PATH = "vector_store/index.faiss"
-CHUNKS_PATH = "vector_store/chunks.pkl"
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(BASE_DIR)
+
+INDEX_PATH = os.path.join(PROJECT_ROOT, "vector_store", "faiss.index")
+CHUNKS_PATH = os.path.join(PROJECT_ROOT, "vector_store", "chunks.pkl")
 
 
 def get_embedding(text, client):
