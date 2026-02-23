@@ -67,7 +67,7 @@ st.write(f"Found {len(pdf_files)} PDF files.")
 
 @st.cache_resource
 def load_knowledge_base():
-    index, chunks =  load_index()
+    index, =  load_index()
 
     if index is not None and chunks is not None:
         return chunks, index
