@@ -7,11 +7,11 @@ from config import GEMINI_API_KEY
 from google import genai
 
 client = genai.Client(
-    vertexai=True,
-    project="pdf-rag-project-488220",
-    location="us-central1"
+    vertexai=True ,
+    credentials=credentials,
+    project=creds_dict["project_id"],
+    location="us-central1",
 )
-
 VECTOR_STORE_PATH = "vector_store/faiss.index"
 CHUNKS_PATH = "vector_store/chunks.pkl"
     
