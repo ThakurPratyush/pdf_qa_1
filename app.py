@@ -8,6 +8,10 @@ from embeddings import create_and_save_index, load_index, retrieve_top_k
 import json
 from google.oauth2 import service_account
 from google import genai
+import json
+from google.oauth2 import service_account
+from google import genai
+import streamlit as st
 
 creds_dict = json.loads(st.secrets["GOOGLE_APPLICATION_CREDENTIALS_JSON"])
 
@@ -18,7 +22,7 @@ credentials = service_account.Credentials.from_service_account_info(
 
 client = genai.Client(
     credentials=credentials,
-    project="your-project-id",
+    project=creds_dict["project_id"],
     location="us-central1"
 )
 PDF_FOLDER = "data/knowledge_base"
