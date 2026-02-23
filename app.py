@@ -65,34 +65,15 @@ st.write(f"Found {len(pdf_files)} PDF files.")
 # Load Knowledge Base
 # --------------------------------------------------
 
-def load_knowledge_base(client):
-    # Try loading saved index first
+@st.cache_resource
+def load_knowledge_base():
     index, chunks = load_index()
 
     if index is not None and chunks is not None:
         return chunks, index
 
-    # Otherwise create new index
-    all_text = ""
-
-    for file_name in pdf_files:
-        file_path = os.path.join(PDF_FOLDER, file_name)
-        with open(file_path, "rb") as f:
-            all_text += extract_text_from_pdf(f)
-
-    if not all_text.strip():
-        st.error("PDF extraction returned empty text.")
-        st.stop()
-
-    chunks = chunk_text(all_text)
-
-    if not chunks:
-        st.error("Text chunking failed.")
-        st.stop()
-
-    index = create_and_save_index(chunks, client)
-
-    return chunks, index
+    st.error("Vector store missing. It should not recompute.")
+    st.stop()
 
 
 with st.spinner("Loading knowledge base..."):

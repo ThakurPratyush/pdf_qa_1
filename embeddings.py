@@ -45,3 +45,5 @@ def retrieve_top_k(query, chunks, index, client, k=3):
     query_embedding = get_embedding(query, client)
     D, I = index.search(np.array([query_embedding]), k)
     return [chunks[i] for i in I[0]]
+
+#####
