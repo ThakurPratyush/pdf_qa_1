@@ -13,8 +13,8 @@ from google.oauth2 import service_account
 from google import genai
 import streamlit as st
 
+# creds_dict = json.loads(st.secrets["GOOGLE_APPLICATION_CREDENTIALS_JSON"])
 creds_dict = json.loads(st.secrets["GOOGLE_APPLICATION_CREDENTIALS_JSON"])
-
 credentials = service_account.Credentials.from_service_account_info(
     creds_dict,
     scopes=["https://www.googleapis.com/auth/cloud-platform"],
