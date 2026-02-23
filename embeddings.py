@@ -9,15 +9,12 @@ import pickle
 # --------------------------------------------------
 
 # This gets: /mount/src/pdf_qa/main
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # This gets: /mount/src/pdf_qa
-PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
 
-VECTOR_STORE_DIR = os.path.join(PROJECT_ROOT, "vector_store")
 
-INDEX_PATH = os.path.join(VECTOR_STORE_DIR, "faiss.index")
-CHUNKS_PATH = os.path.join(VECTOR_STORE_DIR, "chunks.pkl")
+INDEX_PATH = os.path.join(os.getcwd(), "vector_store", "faiss.index")
+CHUNKS_PATH = os.path.join(os.getcwd(), "vector_store", "chunks.pkl")
 
 
 # --------------------------------------------------
