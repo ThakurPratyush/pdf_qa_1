@@ -97,7 +97,7 @@ st.success("Knowledge Base Ready ✅")
 if st.sidebar.button("🔄 Force Rebuild Index"):
     for file in os.listdir("vector_store"):
         os.remove(os.path.join("vector_store", file))
-    st.experimental_rerun()
+    st.rerun()
 
 
 # --------------------------------------------------
