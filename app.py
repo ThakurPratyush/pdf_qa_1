@@ -24,7 +24,7 @@ credentials = service_account.Credentials.from_service_account_info(
 
 client = genai.Client(
     credentials=credentials,
-    project=creds_dict["pdf-rag-project-488220"],
+    project=creds_dict["project_id"],
     location="us-central1"
 )
 PDF_FOLDER = "data/knowledge_base"
