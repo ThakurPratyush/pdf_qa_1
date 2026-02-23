@@ -9,8 +9,8 @@ __pycache__/
 # Service account (DO NOT PUSH THIS)
 service_account.json
 
-# FAISS vector store
-vector_store/
+# # FAISS vector store
+# vector_store/
 
 # Streamlit cache
 .streamlit/
