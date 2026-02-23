@@ -5,10 +5,20 @@ from pdf_utils import extract_text_from_pdf, chunk_text
 from prompts import STRICT_PDF_QA_PROMPT
 from embeddings import create_and_save_index, load_index, retrieve_top_k
 
+import json
+from google.oauth2 import service_account
 from google import genai
+
+creds_dict = json.loads(st.secrets["GOOGLE_APPLICATION_CREDENTIALS_JSON"])
+
+credentials = service_account.Credentials.from_service_account_info(
+    creds_dict,
+    scopes=["https://www.googleapis.com/auth/cloud-platform"],
+)
+
 client = genai.Client(
-    vertexai=True,
-    project="pdf-rag-project-488220",
+    credentials=credentials,
+    project="your-project-id",
     location="us-central1"
 )
 PDF_FOLDER = "data/knowledge_base"
